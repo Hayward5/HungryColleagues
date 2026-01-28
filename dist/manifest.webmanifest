@@ -1,0 +1,16 @@
+{
+  "name": "Office Order System",
+  "short_name": "OfficeOrder",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F4EEDD",
+  "theme_color": "#8B5E3C",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

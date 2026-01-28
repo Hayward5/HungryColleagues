@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": {
+    "typescript": {
+      "command": [
+        "/home/lubuntu/app/bento/node_modules/.bin/typescript-language-server",
+        "--stdio"
+      ]
+    },
+    "vue": {
+      "command": [
+        "/home/lubuntu/app/bento/node_modules/.bin/vue-language-server",
+        "--stdio"
+      ]
+    },
+    "biome": {
+      "command": [
+        "/home/lubuntu/app/bento/node_modules/.bin/biome",
+        "lsp-proxy"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+:root {
+  /* HSL tokens (space-separated) for Tailwind: hsl(var(--token) / <alpha-value>) */
+  --paper: 40 52% 94%;
+  --fog: 38 28% 90%;
+  --ink: 26 24% 16%;
+  --cocoa: 23 37% 32%;
+  --clay: 26 45% 74%;
+  --saffron: 44 90% 72%;
+
+  --shadow-paper: 0 18px 50px -22px hsl(var(--cocoa) / 0.35);
+}

@@ -1,0 +1,5 @@
+GET ping
+curl -s "https://script.google.com/macros/s/DEPLOYMENT_ID/exec?action=ping"
+
+POST ping (application/x-www-form-urlencoded)
+curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "action=ping" "https://script.google.com/macros/s/DEPLOYMENT_ID/exec"

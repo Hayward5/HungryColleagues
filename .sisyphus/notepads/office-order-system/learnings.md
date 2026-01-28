@@ -1,0 +1,18 @@
+- 2026-01-28: Added sheets schema doc + idempotent initSpreadsheet that only creates missing sheets/headers and fills missing Config defaults.
+- 2026-01-28: GitHub Pages compatibility: use %BASE_URL% in index.html manifest link and relative icon path in manifest.
+- 2026-01-28: GAS scaffold uses action router in `Code.gs` with form-urlencoded `e.parameter` and JSON response helper.
+- 2026-01-28: Added data store helpers (Config/Stores/Products/CurrentOrder) and action handlers for getCurrentOrders/getProducts/submitOrder.
+- 2026-01-28: Order page now uses API service wrapper with VITE_API_BASE_URL and falls back to mock data when not configured.
+- 2026-01-28: Added order update/cancel/history/stats/export handlers with shared row update helper and session-open checks.
+- 2026-01-28: Added admin actions (login/token, upload/upsert, open/close session, getStores, toggleActive) with HMAC token verification.
+- 2026-01-28: Admin page now includes login, upload, open/close session, toggle active, export sections with API hooks.
+- 2026-01-28: My Orders and Stats pages now call getOrderSessions/getMyOrders/getStatistics with mock fallback.
+- 2026-01-28: Expanded docs/manual-qa.md with curl examples for user/admin endpoints.
+- 2026-01-28: Added docs/deployment.md with GAS + frontend deployment steps and env config.
+- 2026-01-28: Frontend dev/build/preview verified after npm install with --prefer-offline.
+- 2026-01-28: Fixed Vue Router Transition warnings by using RouterView slot; added favicon link to avoid 404.
+- 2026-01-28: Web App endpoints should read `e.parameter` for GET/POST form data; JSON responses use ContentService TextOutput with JSON mime type.
+
+- 2026-01-28: Frontend skeleton (Vue 3 + Vite + Tailwind + Hash Router) uses `createWebHashHistory(import.meta.env.BASE_URL)`; for GitHub Pages, `vite.config.js` sets `base: './'` (or change to `'/<repo-name>/'` for project pages).
+- 2026-01-28: For GitHub Pages-safe static assets, `index.html` uses `%BASE_URL%` for `manifest`/`icon`, and `public/manifest.webmanifest` uses relative `./icon.svg` so it works under subpaths.
+- 2026-01-28: If npm install fails with SSH git deps (port 22 blocked), use `package.json` `overrides` to pin the dependency to an npm-published version (example: `@emmetio/css-parser`).

@@ -1,0 +1,30 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: theme('fontFamily.body');
+  }
+
+  body {
+    background: hsl(var(--paper) / 1);
+    color: hsl(var(--ink) / 1);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: hsl(var(--saffron) / 0.55);
+    color: hsl(var(--cocoa) / 1);
+  }
+}
+
+@layer components {
+  .rounded-menu {
+    border-radius: theme('borderRadius.menu');
+  }
+}
