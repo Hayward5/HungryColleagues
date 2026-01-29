@@ -1,6 +1,6 @@
 [
   {
-    "ProductID": "P-HUGAN-001",
+    "ProductID": "P-KEBUKE-001",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟成紅茶",
     "Price": 40,
@@ -12,7 +12,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-002",
+    "ProductID": "P-KEBUKE-002",
     "StoreID": "S-KEBUKE",
     "ProductName": "麗春紅茶",
     "Price": 40,
@@ -24,7 +24,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-003",
+    "ProductID": "P-KEBUKE-003",
     "StoreID": "S-KEBUKE",
     "ProductName": "春芽綠茶",
     "Price": 40,
@@ -36,7 +36,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-004",
+    "ProductID": "P-KEBUKE-004",
     "StoreID": "S-KEBUKE",
     "ProductName": "胭脂紅茶",
     "Price": 50,
@@ -48,7 +48,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-005",
+    "ProductID": "P-KEBUKE-005",
     "StoreID": "S-KEBUKE",
     "ProductName": "雪花冷露",
     "Price": 40,
@@ -60,7 +60,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-006",
+    "ProductID": "P-KEBUKE-006",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟成冷露",
     "Price": 45,
@@ -72,7 +72,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-007",
+    "ProductID": "P-KEBUKE-007",
     "StoreID": "S-KEBUKE",
     "ProductName": "春芽冷露",
     "Price": 45,
@@ -84,7 +84,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-008",
+    "ProductID": "P-KEBUKE-008",
     "StoreID": "S-KEBUKE",
     "ProductName": "胭脂冷露",
     "Price": 50,
@@ -96,7 +96,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-009",
+    "ProductID": "P-KEBUKE-009",
     "StoreID": "S-KEBUKE",
     "ProductName": "檸檬冷露",
     "Price": 60,
@@ -108,7 +108,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-010",
+    "ProductID": "P-KEBUKE-010",
     "StoreID": "S-KEBUKE",
     "ProductName": "輕纖穀奈茶",
     "Price": 50,
@@ -120,7 +120,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-011",
+    "ProductID": "P-KEBUKE-011",
     "StoreID": "S-KEBUKE",
     "ProductName": "穀奈冷露",
     "Price": 55,
@@ -132,7 +132,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-012",
+    "ProductID": "P-KEBUKE-012",
     "StoreID": "S-KEBUKE",
     "ProductName": "穀奈歐蕾",
     "Price": 69,
@@ -144,7 +144,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-013",
+    "ProductID": "P-KEBUKE-013",
     "StoreID": "S-KEBUKE",
     "ProductName": "金蜜檸檬",
     "Price": 63,
@@ -156,7 +156,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-014",
+    "ProductID": "P-KEBUKE-014",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟成歐蕾",
     "Price": 65,
@@ -168,7 +168,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-015",
+    "ProductID": "P-KEBUKE-015",
     "StoreID": "S-KEBUKE",
     "ProductName": "冷露歐蕾",
     "Price": 65,
@@ -180,7 +180,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-016",
+    "ProductID": "P-KEBUKE-016",
     "StoreID": "S-KEBUKE",
     "ProductName": "金蜜歐蕾",
     "Price": 70,
@@ -192,7 +192,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-017",
+    "ProductID": "P-KEBUKE-017",
     "StoreID": "S-KEBUKE",
     "ProductName": "胭脂歐蕾",
     "Price": 69,
@@ -204,7 +204,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-018",
+    "ProductID": "P-KEBUKE-018",
     "StoreID": "S-KEBUKE",
     "ProductName": "白玉歐蕾",
     "Price": 70,
@@ -216,7 +216,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-019",
+    "ProductID": "P-KEBUKE-019",
     "StoreID": "S-KEBUKE",
     "ProductName": "鴛鴦歐蕾",
     "Price": 70,
@@ -228,7 +228,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-020",
+    "ProductID": "P-KEBUKE-020",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟成榛果歐蕾",
     "Price": 70,
@@ -240,7 +240,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-021",
+    "ProductID": "P-KEBUKE-021",
     "StoreID": "S-KEBUKE",
     "ProductName": "墨玉鴛鴦歐蕾",
     "Price": 80,
@@ -252,7 +252,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-022",
+    "ProductID": "P-KEBUKE-022",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟檸紅茶",
     "Price": 55,
@@ -264,7 +264,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-023",
+    "ProductID": "P-KEBUKE-023",
     "StoreID": "S-KEBUKE",
     "ProductName": "春檸綠茶",
     "Price": 55,
@@ -276,7 +276,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-024",
+    "ProductID": "P-KEBUKE-024",
     "StoreID": "S-KEBUKE",
     "ProductName": "春梅冰茶",
     "Price": 60,
@@ -288,7 +288,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-025",
+    "ProductID": "P-KEBUKE-025",
     "StoreID": "S-KEBUKE",
     "ProductName": "太妃熟成",
     "Price": 55,
@@ -300,7 +300,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-026",
+    "ProductID": "P-KEBUKE-026",
     "StoreID": "S-KEBUKE",
     "ProductName": "金蜜熟成",
     "Price": 63,
@@ -312,7 +312,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-027",
+    "ProductID": "P-KEBUKE-027",
     "StoreID": "S-KEBUKE",
     "ProductName": "胭脂多多",
     "Price": 60,
@@ -324,7 +324,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-028",
+    "ProductID": "P-KEBUKE-028",
     "StoreID": "S-KEBUKE",
     "ProductName": "熟成奶茶",
     "Price": 55,
@@ -336,7 +336,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-029",
+    "ProductID": "P-KEBUKE-029",
     "StoreID": "S-KEBUKE",
     "ProductName": "春芽奶茶",
     "Price": 55,
@@ -348,7 +348,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-030",
+    "ProductID": "P-KEBUKE-030",
     "StoreID": "S-KEBUKE",
     "ProductName": "胭脂奶茶",
     "Price": 60,
@@ -360,7 +360,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-031",
+    "ProductID": "P-KEBUKE-031",
     "StoreID": "S-KEBUKE",
     "ProductName": "白玉奶茶",
     "Price": 60,
@@ -372,7 +372,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-032",
+    "ProductID": "P-KEBUKE-032",
     "StoreID": "S-KEBUKE",
     "ProductName": "雪藏紅茶",
     "Price": 60,
@@ -384,7 +384,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-033",
+    "ProductID": "P-KEBUKE-033",
     "StoreID": "S-KEBUKE",
     "ProductName": "雪藏奶茶",
     "Price": 69,
@@ -396,7 +396,7 @@
     "IsActive": "TRUE"
   },
   {
-    "ProductID": "P-HUGAN-034",
+    "ProductID": "P-KEBUKE-034",
     "StoreID": "S-KEBUKE",
     "ProductName": "咖啡雪藏胭脂",
     "Price": 75,
