@@ -15,7 +15,7 @@
 
 ### 2. 你的專案資訊
 - **GitHub Repository**: `https://github.com/Hayward5/office-order-system`
-- **GAS Web App URL**: `https://script.google.com/macros/s/AKfycbwvL7iRjeNxXHCwvCPxm3kLuiMIRIdOTEY_6ZpZwqxqr0N_Q717wZKn4p-Z9RL2RsvQEw/exec`
+- **GAS Web App URL**: （從你的 Google Apps Script 部署頁面取得）
 
 ---
 
@@ -115,7 +115,7 @@ jobs:
 
 3. **新增 Secret**:
    - Name: `VITE_API_BASE_URL`
-   - Value: `https://script.google.com/macros/s/AKfycbwvL7iRjeNxXHCwvCPxm3kLuiMIRIdOTEY_6ZpZwqxqr0N_Q717wZKn4p-Z9RL2RsvQEw/exec`
+   - Value: `你的 GAS Web App URL（從 Google Apps Script 部署頁面取得）`
 
 4. **點擊 "Add secret"**
 

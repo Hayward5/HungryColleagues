@@ -69,7 +69,7 @@ To https://github.com/Hayward5/office-order-system.git
    
    **Secret** (值欄位)：
    ```
-   https://script.google.com/macros/s/AKfycbwvL7iRjeNxXHCwvCPxm3kLuiMIRIdOTEY_6ZpZwqxqr0N_Q717wZKn4p-Z9RL2RsvQEw/exec
+   你的 GAS Web App URL（從 Google Apps Script 部署頁面取得）
    ```
 
 4. **點擊 "Add secret" 按鈕**
@@ -223,8 +223,8 @@ To https://github.com/Hayward5/office-order-system.git
 
 - **網站 URL**：`https://hayward5.github.io/office-order-system/`
 - **GitHub Repository**：`https://github.com/Hayward5/office-order-system`
-- **GAS Web App URL**：`https://script.google.com/macros/s/AKfycbwvL7iRjeNxXHCwvCPxm3kLuiMIRIdOTEY_6ZpZwqxqr0N_Q717wZKn4p-Z9RL2RsvQEw/exec`
-- **管理者密碼**：`1qaz@WSX3edc`
+- **GAS Web App URL**：（已設定在 GitHub Secrets 中）
+- **管理者密碼**：（已設定在 GAS Script Properties 中）
 
 ### 自動部署機制
 
