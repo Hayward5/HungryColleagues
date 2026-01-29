@@ -7,7 +7,8 @@ const nameInput = ref(userName.value)
 const sessions = ref({ drink: null, meal: null })
 const activeType = ref('drink')
 const products = ref([])
-const loading = ref(false)
+const loadingSessions = ref(false)
+const loadingProducts = ref(false)
 const errorMessage = ref('')
 const sheetOpen = ref(false)
 const selectedProduct = ref(null)
@@ -21,6 +22,7 @@ const submitStatus = ref('')
 
 const hasUserName = computed(() => userName.value.length > 0)
 const activeSession = computed(() => sessions.value[activeType.value] || null)
+const syncing = computed(() => loadingSessions.value || loadingProducts.value)
 const noteLimit = computed(() => 15)
 const remainingNote = computed(() => noteLimit.value - formState.note.length)
 
@@ -121,7 +123,7 @@ function pickOption(key, value) {
 }
 
 async function loadSessions() {
-  loading.value = true
+  loadingSessions.value = true
   errorMessage.value = ''
   try {
     if (!apiConfigured) {
@@ -139,7 +141,7 @@ async function loadSessions() {
   } catch (error) {
     errorMessage.value = error.message
   } finally {
-    loading.value = false
+    loadingSessions.value = false
   }
 }
 
@@ -155,7 +157,8 @@ async function loadProducts() {
     return
   }
 
-  loading.value = true
+  loadingProducts.value = true
+  products.value = []
   errorMessage.value = ''
   try {
     const response = await apiGet('getProducts', { storeId: session.storeId })
@@ -166,7 +169,7 @@ async function loadProducts() {
   } catch (error) {
     errorMessage.value = error.message
   } finally {
-    loading.value = false
+    loadingProducts.value = false
   }
 }
 
@@ -213,6 +216,7 @@ async function submitOrder() {
 
   if (response && response.success) {
     submitStatus.value = '訂單送出成功'
+    closeSheet()
     return
   }
 
@@ -251,7 +255,11 @@ onMounted(async () => {
         <div class="rounded-menu border border-cocoa/10 bg-fog/70 px-4 py-3 text-xs text-ink/65">
           <div class="font-semibold tracking-[0.24em] text-ink/60">STATUS</div>
           <p class="mt-2 font-semibold text-ink">
-            {{ loading ? '讀取中' : '已同步' }}
+            <span v-if="syncing" class="inline-flex items-center gap-2">
+              <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+              同步中
+            </span>
+            <span v-else>已同步</span>
           </p>
           <p class="mt-1 text-[11px] text-ink/60">
             {{ apiConfigured ? 'GAS API' : '本機示意' }}
@@ -333,7 +341,18 @@ onMounted(async () => {
         </span>
       </div>
 
-      <div v-if="displayProducts.length === 0" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+      <div v-if="syncing && apiConfigured" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+        <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">SYNC</p>
+        <div class="mt-3 flex items-start gap-3">
+          <span class="mt-0.5 h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+          <div>
+            <p class="text-sm font-semibold text-ink">同步中，菜單載入中</p>
+            <p class="mt-1 text-xs text-ink/60">菜單尚未出現通常是因為 GAS 還在回應，請稍等一下。</p>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="displayProducts.length === 0" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
         <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">EMPTY</p>
         <p class="mt-2 text-sm font-semibold text-ink">目前沒有菜單</p>
         <p class="mt-1 text-xs text-ink/60">請稍後再查看或切換場次。</p>
