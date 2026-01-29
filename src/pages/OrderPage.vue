@@ -347,7 +347,7 @@ onMounted(async () => {
           <span class="mt-0.5 h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
           <div>
             <p class="text-sm font-semibold text-ink">同步中，菜單載入中</p>
-            <p class="mt-1 text-xs text-ink/60">菜單尚未出現通常是因為 GAS 還在回應，請稍等一下。</p>
+            <p class="mt-1 text-xs text-ink/60">菜單尚未出現通常是因為伺服器還在回應，請稍等一下。</p>
           </div>
         </div>
       </div>

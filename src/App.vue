@@ -38,10 +38,10 @@ function iconPath(name) {
             <div>
               <p class="text-xs font-semibold tracking-[0.35em] text-cocoa/70">OFFICE ORDER</p>
               <h1 class="mt-2 font-display text-3xl leading-[1.06] text-cocoa sm:text-4xl">
-                Warm Menu System
+                飢餓同事 HungryColleagues
               </h1>
               <p class="mt-3 max-w-[52ch] text-sm leading-relaxed text-ink/80">
-                一個簡潔、耐看的辦公室訂餐入口。先把骨架與風格立好，之後再接 GAS API。
+                今天的會議可以延，但飲料和下午茶不行 / 認真工作之前，先認真點餐
               </p>
             </div>
             <div class="hidden sm:block">
