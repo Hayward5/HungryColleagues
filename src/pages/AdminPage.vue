@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { apiConfigured, apiPost } from '../services/api'
 
 const password = ref('')
@@ -16,6 +16,9 @@ const openStoreId = ref('')
 const openStoreType = ref('drink')
 const openAdminName = ref('')
 const openStatus = ref('')
+
+const stores = ref([])
+const storeListStatus = ref('')
 
 const closeSessionId = ref('')
 const closeStoreType = ref('')
@@ -45,6 +48,45 @@ function logout() {
   adminExpiresAt.value = 0
   sessionStorage.removeItem('officeOrderAdminToken')
   sessionStorage.removeItem('officeOrderAdminTokenExp')
+
+  stores.value = []
+  storeListStatus.value = ''
+}
+
+async function loadStores() {
+  if (!apiConfigured) {
+    stores.value = []
+    storeListStatus.value = 'API 尚未設定，無法載入店家。'
+    return
+  }
+  if (!isLoggedIn.value) {
+    stores.value = []
+    storeListStatus.value = '請先登入以載入店家。'
+    return
+  }
+
+  storeListStatus.value = '載入店家中...'
+  const response = await apiPost('getStores', {
+    adminToken: adminToken.value,
+    storeType: openStoreType.value
+  })
+
+  if (response && response.success) {
+    const rawStores = Array.isArray(response.data) ? response.data : []
+    stores.value = rawStores.filter((store) => store && store.storeId)
+
+    const activeStores = stores.value.filter((store) => store && store.isActive)
+    const selected = stores.value.find((store) => store && store.storeId === openStoreId.value)
+    if (!selected || !selected.isActive) {
+      openStoreId.value = activeStores[0]?.storeId || ''
+    }
+
+    storeListStatus.value = `已載入 ${stores.value.length} 家店` + (activeStores.length ? '' : '（目前無可開單店家）')
+    return
+  }
+
+  stores.value = []
+  storeListStatus.value = response?.error?.message || '載入店家失敗'
 }
 
 async function login() {
@@ -60,6 +102,7 @@ async function login() {
     sessionStorage.setItem('officeOrderAdminToken', adminToken.value)
     sessionStorage.setItem('officeOrderAdminTokenExp', String(adminExpiresAt.value))
     statusMessage.value = '登入成功'
+
     return
   }
   statusMessage.value = response?.error?.message || '登入失敗'
@@ -137,6 +180,26 @@ async function exportOrders() {
   }
   exportStatus.value = response?.error?.message || '匯出失敗'
 }
+
+watch(openStoreType, async () => {
+  openStoreId.value = ''
+  if (isLoggedIn.value) {
+    await loadStores()
+  }
+})
+
+watch(
+  isLoggedIn,
+  async (next) => {
+    if (next) {
+      await loadStores()
+      return
+    }
+    stores.value = []
+    storeListStatus.value = ''
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -216,16 +279,17 @@ async function exportOrders() {
       <div class="mt-4 grid gap-4 sm:grid-cols-2">
         <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">OPEN</p>
-          <input
-            v-model="openStoreId"
-            type="text"
-            placeholder="StoreID"
-            class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
-          />
           <select v-model="openStoreType" class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
-            <option value="drink">drink</option>
-            <option value="meal">meal</option>
+            <option value="drink">喝</option>
+            <option value="meal">吃</option>
           </select>
+          <select v-model="openStoreId" class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
+            <option value="" disabled>選擇店家</option>
+            <option v-for="store in stores" :key="store.storeId" :value="store.storeId" :disabled="!store.isActive">
+              {{ store.storeName || store.storeId }}{{ store.isActive ? '' : '（停用）' }}
+            </option>
+          </select>
+          <p class="mt-2 text-xs text-ink/60">{{ storeListStatus }}</p>
           <input
             v-model="openAdminName"
             type="text"
@@ -253,7 +317,7 @@ async function exportOrders() {
           <input
             v-model="closeStoreType"
             type="text"
-            placeholder="或輸入 storeType（drink/meal）"
+            placeholder="或輸入 storeType（drink=喝 / meal=吃）"
             class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
           />
           <button
