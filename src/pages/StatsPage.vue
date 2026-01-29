@@ -134,30 +134,38 @@ onMounted(async () => {
 
       <p v-if="errorMessage" class="mt-4 text-sm font-semibold text-cocoa">{{ errorMessage }}</p>
 
-      <div class="mt-5 grid gap-3 sm:grid-cols-3">
-        <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
-          <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">KPI</p>
-          <p class="mt-2 text-lg font-bold text-ink">{{ statsData.orderCount }}</p>
-          <p class="mt-1 text-xs text-ink/65">訂單數</p>
+        <div class="mt-5 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+            <p class="mt-2 text-lg font-bold text-ink">{{ loading ? '—' : statsData.orderCount }}</p>
+            <p class="mt-1 text-xs text-ink/65">訂單數</p>
+          </div>
+          <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+            <p class="mt-2 text-lg font-bold text-ink">{{ loading ? '—' : `$ ${statsData.grandTotal}` }}</p>
+            <p class="mt-1 text-xs text-ink/65">總金額</p>
+          </div>
+          <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+            <p class="mt-2 text-lg font-bold text-ink">{{ loading ? '—' : activeList.length }}</p>
+            <p class="mt-1 text-xs text-ink/65">分類數</p>
+          </div>
         </div>
-        <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
-          <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">KPI</p>
-          <p class="mt-2 text-lg font-bold text-ink">$ {{ statsData.grandTotal }}</p>
-          <p class="mt-1 text-xs text-ink/65">總金額</p>
-        </div>
-        <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
-          <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">KPI</p>
-          <p class="mt-2 text-lg font-bold text-ink">{{ loading ? '—' : activeList.length }}</p>
-          <p class="mt-1 text-xs text-ink/65">分類數</p>
-        </div>
-      </div>
     </div>
 
     <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">
         {{ statsMode === 'user' ? '人員統計' : '品項統計' }}
       </h3>
-      <div v-if="activeList.length === 0" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+      <div v-if="loading" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+        <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">LOADING</p>
+        <div class="mt-3 flex items-start gap-3">
+          <span class="mt-0.5 h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+          <div>
+            <p class="text-sm font-semibold text-ink">讀取統計中</p>
+            <p class="mt-1 text-xs text-ink/60">已選擇場次，正在同步統計資料，請稍等一下。</p>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="activeList.length === 0" class="mt-4 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
         <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">EMPTY</p>
         <p class="mt-2 text-sm font-semibold text-ink">目前沒有統計資料</p>
       </div>
