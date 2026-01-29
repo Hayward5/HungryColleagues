@@ -32,4 +32,5 @@ Thumbs.db
 # OhMyOpenCode / Sisyphus local state
 .sisyphus/notepads/
 .sisyphus/drafts/
+.sisyphus/plans/
 .sisyphus/boulder.json
