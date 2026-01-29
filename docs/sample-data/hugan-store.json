@@ -1,0 +1,11 @@
+[
+  {
+    "StoreID": "S-KEBUKE",
+    "StoreName": "可不可熟成紅茶",
+    "StoreType": "drink",
+    "IsActive": "TRUE",
+    "SizeOptionsOverride": "大杯|中杯",
+    "SugarOptionsOverride": "",
+    "IceOptionsOverride": ""
+  }
+]
