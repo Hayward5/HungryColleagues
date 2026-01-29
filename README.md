@@ -1,4 +1,4 @@
-# Office Order System（辦公室訂飲料/便當系統）
+# Hungry Colleagues（辦公室訂飲料/便當系統）
 
 本專案提供「飲料 + 便當」的辦公室訂購系統，前端部署在 GitHub Pages，後端使用 Google Apps Script Web App 串接 Google Sheets。
 
