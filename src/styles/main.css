@@ -1,30 +1,40 @@
-@import './tokens.css';
+@import "./tokens.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    font-family: theme('fontFamily.body');
-  }
+	@layer base {
+		html {
+			/* Tailwind: `font-body` maps to theme('fontFamily.body') */
+			@apply font-body;
+		}
 
-  body {
-    background: hsl(var(--paper) / 1);
-    color: hsl(var(--ink) / 1);
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+		h6 {
+			@apply font-display;
+		}
 
-  ::selection {
-    background: hsl(var(--saffron) / 0.55);
-    color: hsl(var(--cocoa) / 1);
-  }
+	body {
+		background: hsl(var(--paper) / 1);
+		color: hsl(var(--ink) / 1);
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	::selection {
+		background: hsl(var(--saffron) / 0.55);
+		color: hsl(var(--cocoa) / 1);
+	}
 }
 
 @layer components {
-  .rounded-menu {
-    border-radius: theme('borderRadius.menu');
-  }
+	.rounded-menu {
+		border-radius: 18px;
+	}
 }

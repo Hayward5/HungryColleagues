@@ -154,7 +154,7 @@ function iconPath(name) {
 }
 
 .seal__text {
-  font-family: 'Playfair Display SC', serif;
+  font-family: 'Noto Serif TC', serif;
   letter-spacing: 0.22em;
   font-size: 12px;
   color: hsl(var(--cocoa) / 0.9);
@@ -259,7 +259,7 @@ function iconPath(name) {
   inset: 0;
   display: grid;
   place-items: center;
-  font-family: 'Playfair Display SC', serif;
+  font-family: 'Noto Serif TC', serif;
   letter-spacing: 0.24em;
   font-size: 11px;
   color: hsl(var(--cocoa) / 0.85);

@@ -252,7 +252,7 @@ onMounted(async () => {
           <p class="mt-2 text-sm font-semibold text-ink">
             {{ sessions.drink?.storeName || '未開放' }}
           </p>
-          <p class="mt-1 text-xs text-ink/60">
+          <p class="mt-1 text-xs" :class="sessions.drink?.status === 'open' ? 'text-olive font-semibold' : 'text-ink/60'">
             {{ sessions.drink?.status === 'open' ? '開放中' : '已關閉' }}
           </p>
         </button>
@@ -269,7 +269,7 @@ onMounted(async () => {
           <p class="mt-2 text-sm font-semibold text-ink">
             {{ sessions.meal?.storeName || '未開放' }}
           </p>
-          <p class="mt-1 text-xs text-ink/60">
+          <p class="mt-1 text-xs" :class="sessions.meal?.status === 'open' ? 'text-olive font-semibold' : 'text-ink/60'">
             {{ sessions.meal?.status === 'open' ? '開放中' : '已關閉' }}
           </p>
         </button>

@@ -304,7 +304,7 @@ watch(selectedSessionId, async () => {
             <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
             同步場次狀態中
           </span>
-          <span v-else>
+          <span v-else :class="selectedSessionIsOpen ? 'text-olive font-semibold' : ''">
             {{ selectedSessionIsOpen ? '狀態：開放中（可修改/取消）' : '狀態：已關閉（僅可查看）' }}
           </span>
         </p>
@@ -379,7 +379,7 @@ watch(selectedSessionId, async () => {
               </p>
               <p
                 class="mt-1 text-xs font-semibold tracking-[0.2em]"
-                :class="order.status === 'cancelled' ? 'text-cocoa/70' : 'text-ink/60'"
+                :class="order.status === 'cancelled' ? 'text-cocoa/70' : 'text-olive'"
               >
                 {{ order.status === 'cancelled' ? '已取消' : '有效' }}
               </p>
