@@ -25,7 +25,7 @@ Expected (example):
   "data": {
     "message": "pong",
     "method": "POST",
-    "timestamp": "2026-01-28T12:34:56+08:00"
+    "timestamp": "2026-01-29T21:49:36"
   }
 }
 ```
@@ -47,7 +47,7 @@ curl "{WEB_APP_URL}?action=getProducts&storeId=S001"
 ```bash
 curl -X POST "{WEB_APP_URL}" \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  --data "action=submitOrder&userName=王小明&orderSessionId=OS20260128001&storeType=drink&productId=P001&size=中杯&sugar=半糖&ice=少冰&note="
+  --data "action=submitOrder&userName=王小明&orderSessionId=OS2026-01-29T21:49:36&storeType=drink&productId=P001&size=中杯&sugar=半糖&ice=少冰&note="
 ```
 
 ## 修改訂單（updateOrder）
@@ -69,7 +69,7 @@ curl -X POST "{WEB_APP_URL}" \
 ## 查詢我的訂單（getMyOrders）
 
 ```bash
-curl "{WEB_APP_URL}?action=getMyOrders&userName=王小明&orderSessionId=OS20260128001"
+curl "{WEB_APP_URL}?action=getMyOrders&userName=王小明&orderSessionId=OS2026-01-29T21:49:36"
 ```
 
 ## 查詢歷史場次（getOrderSessions）
@@ -81,7 +81,7 @@ curl "{WEB_APP_URL}?action=getOrderSessions&userName=王小明"
 ## 統計（getStatistics）
 
 ```bash
-curl "{WEB_APP_URL}?action=getStatistics&orderSessionId=OS20260128001&storeType=drink"
+curl "{WEB_APP_URL}?action=getStatistics&orderSessionId=OS2026-01-29T21:49:36&storeType=drink"
 ```
 
 ## 管理者登入（adminLogin）
@@ -127,5 +127,5 @@ curl -X POST "{WEB_APP_URL}" \
 ```bash
 curl -X POST "{WEB_APP_URL}" \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  --data "action=exportOrders&adminToken=TOKEN&orderSessionId=OS20260128001"
+  --data "action=exportOrders&adminToken=TOKEN&orderSessionId=OS2026-01-29T21:49:36"
 ```

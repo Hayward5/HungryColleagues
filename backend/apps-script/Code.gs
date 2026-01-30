@@ -113,7 +113,7 @@ function buildError_(code, message) {
 
 function isoNow_() {
   const zone = Session.getScriptTimeZone()
-  return Utilities.formatDate(new Date(), zone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+  return Utilities.formatDate(new Date(), zone, "yyyy-MM-dd'T'HH:mm:ss")
 }
 
 function getScriptProperty_(key) {

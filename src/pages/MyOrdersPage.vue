@@ -46,12 +46,12 @@ const selectedSessionIsOpen = computed(() => {
 })
 
 const mockSessions = [
-  { orderSessionId: 'OS20260128001', storeType: 'drink', createdAt: '2026-01-28 10:00' },
-  { orderSessionId: 'OS20260127001', storeType: 'meal', createdAt: '2026-01-27 12:00' }
+  { orderSessionId: 'OS2026-01-29T10:30:00', storeType: 'drink', createdAt: '2026-01-29 10:30' },
+  { orderSessionId: 'OS2026-01-28T12:00:00', storeType: 'meal', createdAt: '2026-01-28 12:00' }
 ]
 
 const mockOrders = {
-  OS20260128001: [
+  'OS2026-01-29T10:30:00': [
     {
       orderId: 1,
       productName: '焙茶拿鐵',

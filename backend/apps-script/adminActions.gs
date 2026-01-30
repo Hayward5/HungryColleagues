@@ -396,10 +396,8 @@ function upsertRecords_(sheet, idKey, expectedHeaders, records) {
 }
 
 function generateOrderSessionId_(storeType) {
-  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMddHHmmss')
-  const suffix = storeType === 'drink' ? 'D' : 'M'
-  const rand = Utilities.getUuid().slice(0, 4).toUpperCase()
-  return 'OS' + stamp + suffix + rand
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd'T'HH:mm:ss")
+  return 'OS' + stamp
 }
 
 function isStoreTypeOpen_(storeType) {

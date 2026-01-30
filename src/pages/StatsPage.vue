@@ -2,6 +2,9 @@
 import { computed, onMounted, ref } from 'vue'
 import { apiConfigured, apiGet } from '../services/api'
 
+const adminToken = ref(sessionStorage.getItem('officeOrderAdminToken') || '')
+const adminExpiresAt = ref(Number(sessionStorage.getItem('officeOrderAdminTokenExp')) || 0)
+
 const sessions = ref([])
 const selectedSessionId = ref('')
 const storeType = ref('')
@@ -11,9 +14,19 @@ const loading = ref(false)
 const loadingSessions = ref(false)
 const errorMessage = ref('')
 
+const isLoggedIn = computed(() => {
+  if (!adminToken.value) {
+    return false
+  }
+  if (adminExpiresAt.value && Date.now() > adminExpiresAt.value) {
+    return false
+  }
+  return true
+})
+
 const mockSessions = [
-  { orderSessionId: 'OS20260128001', storeType: 'drink' },
-  { orderSessionId: 'OS20260128002', storeType: 'meal' }
+  { orderSessionId: 'OS2026-01-29T10:30:00', storeType: 'drink' },
+  { orderSessionId: 'OS2026-01-29T12:00:00', storeType: 'meal' }
 ]
 
 const mockStats = {
@@ -39,7 +52,13 @@ async function loadSessions() {
     statsData.value = mockStats
     return
   }
+  if (!isLoggedIn.value) {
+    sessions.value = []
+    errorMessage.value = '請先在「管理」頁面登入。'
+    return
+  }
   loadingSessions.value = true
+  errorMessage.value = ''
   try {
     const response = await apiGet('getCurrentOrders')
     if (response && response.success) {
@@ -64,6 +83,11 @@ async function loadStats() {
   }
   if (!apiConfigured) {
     statsData.value = mockStats
+    return
+  }
+  if (!isLoggedIn.value) {
+    statsData.value = { ordersByUser: [], ordersByProduct: [], grandTotal: 0, orderCount: 0 }
+    errorMessage.value = '請先在「管理」頁面登入。'
     return
   }
   loading.value = true
@@ -93,12 +117,26 @@ onMounted(async () => {
 <template>
   <section class="space-y-6">
     <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
-      <h2 class="font-display text-2xl text-cocoa">統計</h2>
-      <p class="mt-2 text-sm leading-relaxed text-ink/80">
-        依場次查看訂單摘要，並切換人員/品項檢視。
-      </p>
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="font-display text-2xl text-cocoa">統計</h2>
+          <p class="mt-2 text-sm leading-relaxed text-ink/80">
+            依場次查看訂單摘要，並切換人員/品項檢視。
+          </p>
+        </div>
+        <div class="text-right text-xs text-ink/60">
+          <p>{{ apiConfigured ? 'GAS API' : '未設定 API' }}</p>
+          <p>狀態：{{ isLoggedIn ? '已登入' : '未登入' }}</p>
+        </div>
+      </div>
 
-      <div class="mt-5 flex flex-wrap items-center gap-3">
+      <div v-if="!isLoggedIn && apiConfigured" class="mt-5 rounded-menu border border-cocoa/10 bg-fog/60 p-4">
+        <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">需要登入</p>
+        <p class="mt-2 text-sm font-semibold text-cocoa">請先在「管理」頁面登入。</p>
+        <p class="mt-1 text-xs text-ink/60">統計功能僅限管理者使用。</p>
+      </div>
+
+      <div v-else class="mt-5 flex flex-wrap items-center gap-3">
         <select
           v-model="selectedSessionId"
           class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
@@ -144,9 +182,9 @@ onMounted(async () => {
         </div>
       </div>
 
-      <p v-if="errorMessage" class="mt-4 text-sm font-semibold text-cocoa">{{ errorMessage }}</p>
+      <p v-if="errorMessage && isLoggedIn" class="mt-4 text-sm font-semibold text-cocoa">{{ errorMessage }}</p>
 
-        <div class="mt-5 grid gap-3 sm:grid-cols-3">
+      <div v-if="isLoggedIn || !apiConfigured" class="mt-5 grid gap-3 sm:grid-cols-3">
           <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
             <p class="mt-2 text-lg font-bold text-ink">{{ loading ? '—' : statsData.orderCount }}</p>
             <p class="mt-1 text-xs text-ink/65">訂單數</p>
@@ -162,7 +200,7 @@ onMounted(async () => {
         </div>
     </div>
 
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+    <div v-if="isLoggedIn || !apiConfigured" class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">
         {{ statsMode === 'user' ? '人員統計' : '品項統計' }}
       </h3>

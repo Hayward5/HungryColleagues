@@ -309,45 +309,6 @@ watch(
     </div>
 
     <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
-      <h3 class="font-display text-xl text-cocoa">資料上傳</h3>
-      <div class="mt-4 grid gap-3 sm:grid-cols-3">
-        <select v-model="uploadType" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
-          <option value="store">店家</option>
-          <option value="product">產品</option>
-        </select>
-        <select v-model="uploadFormat" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
-          <option value="csv">CSV</option>
-          <option value="json">JSON</option>
-        </select>
-        <button
-          type="button"
-          class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa shadow-paper"
-          :class="uploadLoading ? 'opacity-70 cursor-not-allowed' : ''"
-          :disabled="uploadLoading"
-          @click="upload"
-        >
-          <span class="inline-flex items-center gap-2">
-            <span v-if="uploadLoading" class="h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
-            上傳
-          </span>
-        </button>
-      </div>
-      <textarea
-        v-model="uploadData"
-        rows="5"
-        placeholder="貼上 CSV 或 JSON"
-        class="mt-3 w-full rounded-menu border border-cocoa/15 bg-paper/90 p-3 text-sm text-ink focus:border-cocoa/40 focus:outline-none"
-      ></textarea>
-      <p class="mt-2 text-xs text-ink/60">
-        <span v-if="uploadLoading" class="inline-flex items-center gap-2">
-          <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
-          {{ uploadStatus }}
-        </span>
-        <span v-else>{{ uploadStatus }}</span>
-      </p>
-    </div>
-
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">場次管理</h3>
       <div class="mt-4 grid gap-4 sm:grid-cols-2">
         <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
@@ -434,6 +395,79 @@ watch(
     </div>
 
     <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+      <h3 class="font-display text-xl text-cocoa">訂單匯出</h3>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <input
+          v-model="exportSessionId"
+          type="text"
+          placeholder="OrderSessionID"
+          class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
+        />
+        <button
+          type="button"
+          class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa"
+          :class="exportLoading ? 'opacity-70 cursor-not-allowed' : ''"
+          :disabled="exportLoading"
+          @click="exportOrders"
+        >
+          <span class="inline-flex items-center gap-2">
+            <span v-if="exportLoading" class="h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+            匯出
+          </span>
+        </button>
+      </div>
+      <p class="mt-2 text-xs text-ink/60">
+        <span v-if="exportLoading" class="inline-flex items-center gap-2">
+          <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+          {{ exportStatus }}
+        </span>
+        <span v-else>{{ exportStatus }}</span>
+      </p>
+      <pre v-if="exportResult" class="mt-3 max-h-48 overflow-auto rounded-menu border border-cocoa/10 bg-fog/60 p-3 text-xs text-ink">
+{{ exportResult }}
+      </pre>
+    </div>
+
+    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+      <h3 class="font-display text-xl text-cocoa">資料上傳</h3>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        <select v-model="uploadType" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
+          <option value="store">店家</option>
+          <option value="product">產品</option>
+        </select>
+        <select v-model="uploadFormat" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
+          <option value="csv">CSV</option>
+          <option value="json">JSON</option>
+        </select>
+        <button
+          type="button"
+          class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa shadow-paper"
+          :class="uploadLoading ? 'opacity-70 cursor-not-allowed' : ''"
+          :disabled="uploadLoading"
+          @click="upload"
+        >
+          <span class="inline-flex items-center gap-2">
+            <span v-if="uploadLoading" class="h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+            上傳
+          </span>
+        </button>
+      </div>
+      <textarea
+        v-model="uploadData"
+        rows="5"
+        placeholder="貼上 CSV 或 JSON"
+        class="mt-3 w-full rounded-menu border border-cocoa/15 bg-paper/90 p-3 text-sm text-ink focus:border-cocoa/40 focus:outline-none"
+      ></textarea>
+      <p class="mt-2 text-xs text-ink/60">
+        <span v-if="uploadLoading" class="inline-flex items-center gap-2">
+          <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+          {{ uploadStatus }}
+        </span>
+        <span v-else>{{ uploadStatus }}</span>
+      </p>
+    </div>
+
+    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">啟用/停用</h3>
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <select v-model="toggleType" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
@@ -470,40 +504,6 @@ watch(
         </span>
         <span v-else>{{ toggleStatus }}</span>
       </p>
-    </div>
-
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
-      <h3 class="font-display text-xl text-cocoa">訂單匯出</h3>
-      <div class="mt-4 flex flex-wrap items-center gap-3">
-        <input
-          v-model="exportSessionId"
-          type="text"
-          placeholder="OrderSessionID"
-          class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
-        />
-        <button
-          type="button"
-          class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa"
-          :class="exportLoading ? 'opacity-70 cursor-not-allowed' : ''"
-          :disabled="exportLoading"
-          @click="exportOrders"
-        >
-          <span class="inline-flex items-center gap-2">
-            <span v-if="exportLoading" class="h-4 w-4 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
-            匯出
-          </span>
-        </button>
-      </div>
-      <p class="mt-2 text-xs text-ink/60">
-        <span v-if="exportLoading" class="inline-flex items-center gap-2">
-          <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
-          {{ exportStatus }}
-        </span>
-        <span v-else>{{ exportStatus }}</span>
-      </p>
-      <pre v-if="exportResult" class="mt-3 max-h-48 overflow-auto rounded-menu border border-cocoa/10 bg-fog/60 p-3 text-xs text-ink">
-{{ exportResult }}
-      </pre>
     </div>
   </section>
 </template>

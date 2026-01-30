@@ -34,3 +34,5 @@ Thumbs.db
 .sisyphus/drafts/
 .sisyphus/plans/
 .sisyphus/boulder.json
+
+.opencode/

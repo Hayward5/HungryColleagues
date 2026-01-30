@@ -29,7 +29,7 @@ const remainingNote = computed(() => noteLimit.value - formState.note.length)
 
 const mockSessions = {
   drink: {
-    orderSessionId: 'OS20260128001',
+    orderSessionId: 'OS2026-01-29T10:30:00',
     storeId: 'S001',
     storeName: '暖心飲品',
     storeType: 'drink',
@@ -41,7 +41,7 @@ const mockSessions = {
     }
   },
   meal: {
-    orderSessionId: 'OS20260128002',
+    orderSessionId: 'OS2026-01-29T12:00:00',
     storeId: 'M001',
     storeName: '午餐食堂',
     storeType: 'meal',
