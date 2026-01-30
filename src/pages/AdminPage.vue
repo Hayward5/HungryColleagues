@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { apiConfigured, apiPost, clearAdminCaches } from '../services/api'
+import { apiConfigured, apiGet, apiPost, clearAdminCaches } from '../services/api'
 
 const password = ref('')
 const adminToken = ref(sessionStorage.getItem('officeOrderAdminToken') || '')
@@ -25,10 +25,18 @@ const stores = ref([])
 const storeListStatus = ref('')
 const storesLoading = ref(false)
 
+const openOrderSessions = ref([])
+const openOrderStatus = ref('')
+const openOrderLoading = ref(false)
+
 const closeSessionId = ref('')
 const closeStoreType = ref('')
 const closeStatus = ref('')
 const closeLoading = ref(false)
+
+const selectedCloseSession = computed(() => {
+  return openOrderSessions.value.find((session) => session.orderSessionId === closeSessionId.value) || null
+})
 
 const toggleType = ref('store')
 const toggleId = ref('')
@@ -111,6 +119,39 @@ async function loadStores() {
   }
 }
 
+async function loadOpenOrderSessions() {
+  if (!apiConfigured) {
+    openOrderSessions.value = []
+    openOrderStatus.value = '請設定 VITE_API_BASE_URL 環境變數'
+    return
+  }
+
+  openOrderLoading.value = true
+  openOrderStatus.value = '載入場次中...'
+  try {
+    const response = await apiGet('getCurrentOrders')
+    if (response && response.success) {
+      const data = response.data || {}
+      const sessions = [data.drink, data.meal]
+        .filter(Boolean)
+        .filter((session) => session.status === 'open')
+
+      openOrderSessions.value = sessions
+      openOrderStatus.value = sessions.length ? `尚未關單 ${sessions.length} 筆` : '目前沒有尚未關單的場次'
+
+      const nextSelected = sessions.find((session) => session.orderSessionId === closeSessionId.value) || sessions[0] || null
+      closeSessionId.value = nextSelected?.orderSessionId || ''
+      closeStoreType.value = nextSelected?.storeType || ''
+      return
+    }
+
+    openOrderSessions.value = []
+    openOrderStatus.value = response?.error?.message || '載入場次失敗'
+  } finally {
+    openOrderLoading.value = false
+  }
+}
+
 async function login() {
   if (!apiConfigured) {
     statusMessage.value = '請設定 VITE_API_BASE_URL 環境變數'
@@ -166,6 +207,7 @@ async function openOrder() {
     })
     if (response && response.success) {
       openStatus.value = `已開單：${response.orderSessionId}`
+      await loadOpenOrderSessions()
       return
     }
     openStatus.value = response?.error?.message || '開單失敗'
@@ -181,10 +223,11 @@ async function closeOrder() {
     const response = await apiPost('closeOrder', {
       adminToken: adminToken.value,
       orderSessionId: closeSessionId.value,
-      storeType: closeStoreType.value
+      storeType: selectedCloseSession.value?.storeType || closeStoreType.value
     })
     if (response && response.success) {
       closeStatus.value = '已關單'
+      await loadOpenOrderSessions()
       return
     }
     closeStatus.value = response?.error?.message || '關單失敗'
@@ -239,15 +282,27 @@ watch(openStoreType, async () => {
   }
 })
 
+watch(closeSessionId, (next) => {
+  const session = openOrderSessions.value.find((item) => item.orderSessionId === next)
+  if (session) {
+    closeStoreType.value = session.storeType
+  }
+})
+
 watch(
   isLoggedIn,
   async (next) => {
     if (next) {
       await loadStores()
+      await loadOpenOrderSessions()
       return
     }
     stores.value = []
     storeListStatus.value = ''
+
+    openOrderSessions.value = []
+    openOrderStatus.value = ''
+    openOrderLoading.value = false
   },
   { immediate: true }
 )
@@ -309,7 +364,7 @@ watch(
       </div>
     </div>
 
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+    <div v-if="isLoggedIn" class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">場次管理</h3>
       <div class="mt-4 grid gap-4 sm:grid-cols-2">
         <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
@@ -360,17 +415,29 @@ watch(
 
         <div class="rounded-menu border border-cocoa/10 bg-fog/60 p-4">
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">CLOSE</p>
-          <input
+          <select
             v-model="closeSessionId"
-            type="text"
-            placeholder="OrderSessionID"
             class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
-          />
+            :disabled="openOrderLoading || openOrderSessions.length === 0"
+          >
+            <option value="" disabled>選擇尚未關單單號</option>
+            <option v-for="session in openOrderSessions" :key="session.orderSessionId" :value="session.orderSessionId">
+              {{ session.orderSessionId }}
+            </option>
+          </select>
+          <p class="mt-2 text-xs text-ink/60">
+            <span v-if="openOrderLoading" class="inline-flex items-center gap-2">
+              <span class="h-3.5 w-3.5 rounded-full border-2 border-cocoa/25 border-t-cocoa animate-spin"></span>
+              {{ openOrderStatus }}
+            </span>
+            <span v-else>{{ openOrderStatus }}</span>
+          </p>
           <input
             v-model="closeStoreType"
             type="text"
-            placeholder="或輸入 storeType（drink=喝 / meal=吃）"
+            placeholder="storeType"
             class="mt-2 w-full rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
+            disabled
           />
           <button
             type="button"
@@ -395,7 +462,7 @@ watch(
       </div>
     </div>
 
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+    <div v-if="isLoggedIn" class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">訂單匯出</h3>
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <input
@@ -429,7 +496,7 @@ watch(
       </pre>
     </div>
 
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+    <div v-if="isLoggedIn" class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">資料上傳</h3>
       <div class="mt-4 grid gap-3 sm:grid-cols-3">
         <select v-model="uploadType" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
@@ -468,7 +535,7 @@ watch(
       </p>
     </div>
 
-    <div class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
+    <div v-if="isLoggedIn" class="rounded-menu border border-cocoa/10 bg-paper/80 p-5 shadow-paper">
       <h3 class="font-display text-xl text-cocoa">啟用/停用</h3>
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <select v-model="toggleType" class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink">
