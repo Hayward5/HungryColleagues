@@ -12,11 +12,11 @@ const CACHE_CONFIG = {
 }
 
 const INVALIDATION_MAP = {
-  'uploadData': (body) => body.dataType === 'store' ? ['hc_getStores_'] : ['hc_getProducts_'],
-  'toggleActive': (body) => body.type === 'store' ? ['hc_getStores_'] : ['hc_getProducts_'],
-  'openOrder': () => ['hc_getCurrentOrders'],
-  'closeOrder': () => ['hc_getCurrentOrders'],
-  'submitOrder': () => ['hc_getOrderSessions_']
+  'uploadData': (body) => body.dataType === 'store' ? ['getStores_'] : ['getProducts_'],
+  'toggleActive': (body) => body.type === 'store' ? ['getStores_'] : ['getProducts_'],
+  'openOrder': () => ['getCurrentOrders'],
+  'closeOrder': () => ['getCurrentOrders'],
+  'submitOrder': () => ['getOrderSessions_']
 }
 
 function buildUrl(action, params) {
@@ -115,5 +115,5 @@ async function parseResponse(response) {
 }
 
 export function clearAdminCaches() {
-  invalidateByPrefix('hc_getStores_', 'memory')
+  invalidateByPrefix('getStores_', 'memory')
 }
