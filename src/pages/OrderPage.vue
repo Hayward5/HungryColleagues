@@ -20,8 +20,27 @@ const formState = reactive({
   note: ''
 })
 const submitStatus = ref('')
+const userIdError = ref('')
 
-const hasUserName = computed(() => userName.value.length > 0)
+// Sanitize input to digits only and limit to 5 characters
+watch(nameInput, (newValue) => {
+  const sanitized = newValue.replace(/\D/g, '').slice(0, 5)
+  if (sanitized !== newValue) {
+    nameInput.value = sanitized
+  }
+})
+
+const trimmedInput = computed(() => nameInput.value.trim())
+const showIdError = computed(() => trimmedInput.value.length > 0 && !isValidUserId(trimmedInput.value))
+
+const hasUserName = computed(() => {
+  return userName.value.length > 0 && isValidUserId(userName.value)
+})
+
+const isValidUserId = (id) => {
+  if (!id || id.trim() === '') return false
+  return /^5\d{4}$/.test(id.trim())
+}
 const activeSession = computed(() => sessions.value[activeType.value] || null)
 const syncing = computed(() => loadingSessions.value || loadingProducts.value)
 const noteLimit = computed(() => 15)
@@ -29,10 +48,15 @@ const remainingNote = computed(() => noteLimit.value - formState.note.length)
 const displayProducts = computed(() => products.value)
 
 function saveName() {
-  const trimmed = nameInput.value.trim()
+  const trimmed = trimmedInput.value
   if (!trimmed) {
     return
   }
+  
+  if (!isValidUserId(trimmed)) {
+    return
+  }
+  
   userName.value = trimmed
   localStorage.setItem('officeOrderUser', trimmed)
 }
@@ -41,10 +65,16 @@ function selectType(type) {
   if (!sessions.value[type]) {
     return
   }
+  if (!hasUserName.value) {
+    return
+  }
   activeType.value = type
 }
 
 function openSheet(product) {
+  if (!hasUserName.value) {
+    return
+  }
   selectedProduct.value = product
   formState.size = ''
   formState.sugar = ''
@@ -183,6 +213,14 @@ watch(sessions, () => {
 })
 
 onMounted(async () => {
+  // Validate and clear invalid stored user ID on page load
+  const storedUserId = localStorage.getItem('officeOrderUser')
+  if (storedUserId && !isValidUserId(storedUserId)) {
+    localStorage.removeItem('officeOrderUser')
+    userName.value = ''
+    nameInput.value = ''
+  }
+  
   await loadSessions()
   await loadProducts()
 })
@@ -218,15 +256,22 @@ onMounted(async () => {
         <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">USER</p>
         <div class="mt-3 flex flex-wrap items-center gap-3">
           <div class="text-sm font-semibold text-ink">
-            {{ hasUserName ? `你好，${userName}` : '尚未設定姓名' }}
+            {{ hasUserName ? `分機：${userName}` : '尚未設定分機號碼' }}
           </div>
           <div v-if="!hasUserName" class="flex flex-wrap items-center gap-2">
-            <input
-              v-model="nameInput"
-              type="text"
-              placeholder="輸入姓名"
-              class="rounded-menu border border-cocoa/15 bg-paper/90 px-3 py-2 text-sm text-ink focus:border-cocoa/50 focus:outline-none"
-            />
+            <div class="flex flex-col gap-2">
+              <input
+                v-model="nameInput"
+                type="text"
+                placeholder="輸入分機號碼(5開頭，共5碼)"
+                inputmode="numeric"
+                maxlength="5"
+                class="rounded-menu border border-cocoa/15 bg-paper/90 px-3 py-2 text-sm text-ink focus:border-cocoa/50 focus:outline-none"
+              />
+              <p v-if="showIdError" class="text-sm font-semibold text-cocoa">
+                格式不符：需為5開頭的5位數字
+              </p>
+            </div>
             <button
               type="button"
               class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa shadow-paper"
@@ -243,9 +288,10 @@ onMounted(async () => {
           type="button"
           class="rounded-menu border border-cocoa/10 bg-paper/90 p-4 text-left transition"
           :class="[
-            sessions.drink ? 'hover:bg-fog/70' : 'opacity-50',
+            sessions.drink && hasUserName ? 'hover:bg-fog/70' : 'opacity-50 cursor-not-allowed',
             activeType === 'drink' ? 'ring-2 ring-saffron/70' : ''
           ]"
+          :disabled="!hasUserName"
           @click="selectType('drink')"
         >
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">DRINK</p>
@@ -260,9 +306,10 @@ onMounted(async () => {
           type="button"
           class="rounded-menu border border-cocoa/10 bg-paper/90 p-4 text-left transition"
           :class="[
-            sessions.meal ? 'hover:bg-fog/70' : 'opacity-50',
+            sessions.meal && hasUserName ? 'hover:bg-fog/70' : 'opacity-50 cursor-not-allowed',
             activeType === 'meal' ? 'ring-2 ring-saffron/70' : ''
           ]"
+          :disabled="!hasUserName"
           @click="selectType('meal')"
         >
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">MEAL</p>
@@ -310,7 +357,11 @@ onMounted(async () => {
           v-for="product in displayProducts"
           :key="product.productId"
           type="button"
-          class="group rounded-menu border border-cocoa/10 bg-fog/60 p-4 text-left transition hover:-translate-y-0.5 hover:bg-saffron/10"
+          class="group rounded-menu border border-cocoa/10 bg-fog/60 p-4 text-left transition"
+          :class="[
+            hasUserName ? 'hover:-translate-y-0.5 hover:bg-saffron/10' : 'cursor-not-allowed opacity-60'
+          ]"
+          :disabled="!hasUserName"
           @click="openSheet(product)"
         >
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">{{ product.category || 'MENU' }}</p>

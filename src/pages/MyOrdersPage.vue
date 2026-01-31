@@ -27,7 +27,25 @@ const editStatus = ref('')
 const currentSessions = ref({ drink: null, meal: null })
 const loadingCurrentSessions = ref(false)
 
-const hasUserName = computed(() => userName.value.length > 0)
+// Sanitize input to digits only and limit to 5 characters
+watch(nameInput, (newValue) => {
+  const sanitized = newValue.replace(/\D/g, '').slice(0, 5)
+  if (sanitized !== newValue) {
+    nameInput.value = sanitized
+  }
+})
+
+const trimmedInput = computed(() => nameInput.value.trim())
+const showIdError = computed(() => trimmedInput.value.length > 0 && !isValidUserId(trimmedInput.value))
+
+const hasUserName = computed(() => {
+  return userName.value.length > 0 && isValidUserId(userName.value)
+})
+
+const isValidUserId = (id) => {
+  if (!id || id.trim() === '') return false
+  return /^5\d{4}$/.test(id.trim())
+}
 const noteLimit = computed(() => 15)
 const remainingNote = computed(() => noteLimit.value - editState.note.length)
 const selectedSession = computed(() => sessions.value.find((s) => s.orderSessionId === selectedSessionId.value))
@@ -46,10 +64,15 @@ const selectedSessionIsOpen = computed(() => {
 })
 
 function saveName() {
-  const trimmed = nameInput.value.trim()
+  const trimmed = trimmedInput.value
   if (!trimmed) {
     return
   }
+  
+  if (!isValidUserId(trimmed)) {
+    return
+  }
+  
   userName.value = trimmed
   localStorage.setItem('officeOrderUser', trimmed)
   loadSessions()
@@ -134,6 +157,10 @@ async function loadCurrentSessions() {
 }
 
 function openEdit(order) {
+  if (!hasUserName.value) {
+    actionStatus.value = '請先設定有效的分機號碼'
+    return
+  }
   if (!selectedSessionIsOpen.value) {
     actionStatus.value = '此場次已關閉，無法修改訂單'
     return
@@ -194,6 +221,10 @@ async function submitEdit() {
 }
 
 async function cancelOrder(orderId) {
+  if (!hasUserName.value) {
+    actionStatus.value = '請先設定有效的分機號碼'
+    return
+  }
   if (!selectedSessionIsOpen.value) {
     actionStatus.value = '此場次已關閉,無法取消訂單'
     return
@@ -237,6 +268,14 @@ const optionSets = computed(() => {
 })
 
 onMounted(async () => {
+  // Validate and clear invalid stored user ID on page load
+  const storedUserId = localStorage.getItem('officeOrderUser')
+  if (storedUserId && !isValidUserId(storedUserId)) {
+    localStorage.removeItem('officeOrderUser')
+    userName.value = ''
+    nameInput.value = ''
+  }
+  
   await loadSessions()
   await loadCurrentSessions()
 })
@@ -259,15 +298,22 @@ watch(selectedSessionId, async () => {
         <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">USER</p>
         <div class="mt-3 flex flex-wrap items-center gap-3">
           <div class="text-sm font-semibold text-ink">
-            {{ hasUserName ? `你好，${userName}` : '尚未設定姓名' }}
+            {{ hasUserName ? `分機：${userName}` : '尚未設定分機號碼' }}
           </div>
           <div v-if="!hasUserName" class="flex flex-wrap items-center gap-2">
-            <input
-              v-model="nameInput"
-              type="text"
-              placeholder="輸入姓名"
-              class="rounded-menu border border-cocoa/15 bg-paper/90 px-3 py-2 text-sm text-ink focus:border-cocoa/50 focus:outline-none"
-            />
+            <div class="flex flex-col gap-2">
+              <input
+                v-model="nameInput"
+                type="text"
+                placeholder="輸入分機號碼(5開頭，共5碼)"
+                inputmode="numeric"
+                maxlength="5"
+                class="rounded-menu border border-cocoa/15 bg-paper/90 px-3 py-2 text-sm text-ink focus:border-cocoa/50 focus:outline-none"
+              />
+              <p v-if="showIdError" class="text-sm font-semibold text-cocoa">
+                格式不符：需為5開頭的5位數字
+              </p>
+            </div>
             <button
               type="button"
               class="rounded-menu bg-saffron px-4 py-2 text-sm font-bold text-cocoa shadow-paper"
@@ -285,8 +331,8 @@ watch(selectedSessionId, async () => {
           <select
             v-model="selectedSessionId"
             class="rounded-menu border border-cocoa/15 bg-paper px-3 py-2 text-sm text-ink"
-            :disabled="loadingSessions"
-            :class="loadingSessions ? 'opacity-70 cursor-not-allowed' : ''"
+            :disabled="loadingSessions || !hasUserName"
+            :class="(loadingSessions || !hasUserName) ? 'opacity-70 cursor-not-allowed' : ''"
           >
             <option value="" disabled>選擇場次</option>
             <option v-for="session in sessions" :key="session.orderSessionId" :value="session.orderSessionId">
@@ -389,8 +435,8 @@ watch(selectedSessionId, async () => {
             <button
               type="button"
               class="rounded-menu border border-cocoa/20 px-3 py-1 text-xs font-semibold text-cocoa"
-              :class="(!selectedSessionIsOpen || order.status !== 'active') ? 'cursor-not-allowed opacity-50' : ''"
-              :disabled="!selectedSessionIsOpen || order.status !== 'active'"
+              :class="(!hasUserName || !selectedSessionIsOpen || order.status !== 'active') ? 'cursor-not-allowed opacity-50' : ''"
+              :disabled="!hasUserName || !selectedSessionIsOpen || order.status !== 'active'"
               @click="openEdit(order)"
             >
               修改
@@ -398,8 +444,8 @@ watch(selectedSessionId, async () => {
             <button
               type="button"
               class="rounded-menu bg-cocoa px-3 py-1 text-xs font-semibold text-paper"
-              :class="(!selectedSessionIsOpen || order.status !== 'active' || cancelling) ? 'cursor-not-allowed opacity-50' : ''"
-              :disabled="!selectedSessionIsOpen || order.status !== 'active' || cancelling"
+              :class="(!hasUserName || !selectedSessionIsOpen || order.status !== 'active' || cancelling) ? 'cursor-not-allowed opacity-50' : ''"
+              :disabled="!hasUserName || !selectedSessionIsOpen || order.status !== 'active' || cancelling"
               @click="cancelOrder(order.orderId)"
             >
               <span class="inline-flex items-center gap-2">
