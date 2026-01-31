@@ -291,7 +291,7 @@ onMounted(async () => {
             sessions.drink && hasUserName ? 'hover:bg-fog/70' : 'opacity-50 cursor-not-allowed',
             activeType === 'drink' ? 'ring-2 ring-saffron/70' : ''
           ]"
-          :disabled="!hasUserName"
+          :disabled="!sessions.drink || !hasUserName"
           @click="selectType('drink')"
         >
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">DRINK</p>
@@ -309,7 +309,7 @@ onMounted(async () => {
             sessions.meal && hasUserName ? 'hover:bg-fog/70' : 'opacity-50 cursor-not-allowed',
             activeType === 'meal' ? 'ring-2 ring-saffron/70' : ''
           ]"
-          :disabled="!hasUserName"
+          :disabled="!sessions.meal || !hasUserName"
           @click="selectType('meal')"
         >
           <p class="text-xs font-semibold tracking-[0.24em] text-ink/55">MEAL</p>
